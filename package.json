@@ -1,1 +1,39 @@
-{     "devDependencies": {         "excel-export": "*",         "electron-lite": "kaizhu256/node-electron-lite#alpha",         "utility2": "kaizhu256/node-utility2#alpha"     },     "name":"npmdoc-excel-export",     "homepage": "https://github.com/npmdoc/node-npmdoc-excel-export",     "repository": {         "type": "git",         "url": "https://github.com/npmdoc/node-npmdoc-excel-export.git"     },     "scripts": {         "build-ci": "utility2 shReadmeTest build_ci.sh"     },     "version": "0.0.1" }
+{
+    "author": "kai zhu <kaizhu256@gmail.com>",
+    "description": "#### api documentation for  [excel-export (v0.5.1)](https://github.com/functionscope/Node-Excel-Export)  [![npm package](https://img.shields.io/npm/v/npmdoc-excel-export.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-excel-export) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-excel-export.svg)](https://travis-ci.org/npmdoc/node-npmdoc-excel-export)",
+    "devDependencies": {
+        "electron-lite": "kaizhu256/node-electron-lite#alpha",
+        "excel-export": "*",
+        "utility2": "kaizhu256/node-utility2#alpha"
+    },
+    "engines": {
+        "node": ">=4.0"
+    },
+    "homepage": "https://github.com/npmdoc/node-npmdoc-excel-export",
+    "keywords": [
+        "documentation",
+        "excel-export"
+    ],
+    "license": "MIT",
+    "main": "lib.npmdoc_excel_export.js",
+    "name": "npmdoc-excel-export",
+    "nameAlias": "npmdoc_excel_export",
+    "nameOriginal": "npmdoc-excel-export",
+    "os": [
+        "darwin",
+        "linux"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/npmdoc/node-npmdoc-excel-export.git"
+    },
+    "scripts": {
+        "build-ci": "utility2 shReadmeTest build_ci.sh",
+        "env": "env",
+        "heroku-postbuild": "npm install \"kaizhu256/node-utility2#alpha\" && utility2 shDeployHeroku",
+        "postinstall": "[ ! -f npm_scripts.sh ] || ./npm_scripts.sh postinstall",
+        "start": "PORT=${PORT:-8080} utility2 start test.js",
+        "test": "(set -e; export PORT=$(utility2 shServerPortRandom); utility2 test test.js)"
+    },
+    "version": "0.0.1"
+}
