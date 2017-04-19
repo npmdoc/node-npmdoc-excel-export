@@ -1,0 +1,358 @@
+<html><head></head><body><div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a href="https://github.com/functionscope/Node-Excel-Export">excel-export (v0.5.1)</a>
+</h1>
+<h4>Simple data set export to Excel xlsx file</h4>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.excel-export">module excel-export</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.excel-export.execute">
+            function <span class="apidocSignatureSpan">excel-export.</span>execute
+            <span class="apidocSignatureSpan">(config)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.excel-export.executeAsync">
+            function <span class="apidocSignatureSpan">excel-export.</span>executeAsync
+            <span class="apidocSignatureSpan">(config, callBack)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.excel-export.sheet">
+            function <span class="apidocSignatureSpan">excel-export.</span>sheet
+            <span class="apidocSignatureSpan">(config, xlsx, shareStrings, convertedShareStrings)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">excel-export.</span>sheet.prototype</span>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.excel-export.sheet">module excel-export.sheet</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.excel-export.sheet.sheet">
+            function <span class="apidocSignatureSpan">excel-export.</span>sheet
+            <span class="apidocSignatureSpan">(config, xlsx, shareStrings, convertedShareStrings)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.excel-export.sheet.prototype">module excel-export.sheet.prototype</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.excel-export.sheet.prototype.generate">
+            function <span class="apidocSignatureSpan">excel-export.sheet.prototype.</span>generate
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.excel-export" id="apidoc.module.excel-export">module excel-export</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.excel-export.execute" id="apidoc.element.excel-export.execute">
+        function <span class="apidocSignatureSpan">excel-export.</span>execute
+        <span class="apidocSignatureSpan">(config)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">execute = function (config) {
+	var xlsx = new JSZip(templateXLSX, {
+		base64: true,
+		checkCRC32: false
+	});
+	shareStrings = new SortedMap();
+	convertedShareStrings = "";
+
+	var configs = [];
+	if (config instanceof Array) {
+		configs = config;
+	}else{
+		configs.push(config);
+	}
+	generateMultiSheets(configs, xlsx);
+	generateWorkbook(configs, xlsx);
+	generateRel(configs,xlsx) ;
+	generateContentType(configs, xlsx);
+	generateSharedStringsFile(xlsx);
+	var results = xlsx.generate({
+		base64: false,
+		compression: "DEFLATE"
+	});
+	delete shareStrings;
+	delete xlsx;
+	return results;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+	  	}];
+	  	conf.rows = [
+	 		['pi', new Date(Date.UTC(2013, 4, 1)), true, 3.14],
+	 		["e", new Date(2012, 4, 1), false, 2.7182],
+            ["M&amp;M&lt;&gt;'", new Date(Date.UTC(2013, 6, 9)), false, 1.61803],
+            ["null date", null, true, 1.414]
+	  	];
+	  	var result = nodeExcel.<span class="apidocCodeKeywordSpan">execute</span>(conf);
+	  	res.setHeader('Content-Type', 'application/vnd.openxmlformats');
+	  	res.setHeader("Content-Disposition", "attachment; filename=" + "Report.xlsx");
+	  	res.end(result, 'binary');
+	});
+
+	app.listen(3000);
+	console.log('Listening on port 3000');
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.excel-export.executeAsync" id="apidoc.element.excel-export.executeAsync">
+        function <span class="apidocSignatureSpan">excel-export.</span>executeAsync
+        <span class="apidocSignatureSpan">(config, callBack)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">executeAsync = function (config, callBack) {
+	return process.nextTick(function() {
+		var r = exports.execute(config);
+		callBack(r);
+	});
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.excel-export.sheet" id="apidoc.element.excel-export.sheet">
+        function <span class="apidocSignatureSpan">excel-export.</span>sheet
+        <span class="apidocSignatureSpan">(config, xlsx, shareStrings, convertedShareStrings)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function Sheet(config, xlsx, shareStrings, convertedShareStrings){
+  this.config = config;
+  this.xlsx = xlsx;
+  this.shareStrings = shareStrings;
+  this.convertedShareStrings = convertedShareStrings;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.excel-export.sheet" id="apidoc.module.excel-export.sheet">module excel-export.sheet</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.excel-export.sheet.sheet" id="apidoc.element.excel-export.sheet.sheet">
+        function <span class="apidocSignatureSpan">excel-export.</span>sheet
+        <span class="apidocSignatureSpan">(config, xlsx, shareStrings, convertedShareStrings)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function Sheet(config, xlsx, shareStrings, convertedShareStrings){
+  this.config = config;
+  this.xlsx = xlsx;
+  this.shareStrings = shareStrings;
+  this.convertedShareStrings = convertedShareStrings;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.excel-export.sheet.prototype" id="apidoc.module.excel-export.sheet.prototype">module excel-export.sheet.prototype</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.excel-export.sheet.prototype.generate" id="apidoc.element.excel-export.sheet.prototype.generate">
+        function <span class="apidocSignatureSpan">excel-export.sheet.prototype.</span>generate
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">generate = function (){
+  var config = this.config, xlsx = this.xlsx;
+	var cols = config.cols,
+	data = config.rows,
+	colsLength = cols.length,
+	rows = "",
+	row = "",
+	colsWidth = "",
+	styleIndex,
+  self = this,
+	k;
+	config.fileName = 'xl/worksheets/' + (config.name || "sheet").replace(/[*?\]\[\/\/]/g, '') + '.xml';
+	if (config.stylesXmlFile) {
+		var path = config.stylesXmlFile;
+		var styles = null;
+		styles = fs.readFileSync(path, 'utf8');
+		if (styles) {
+			xlsx.file("xl/styles.xml", styles);
+		}
+	}
+
+	//first row for column caption
+	row = '&lt;x:row r="1" spans="1:' + colsLength + '"&gt;';
+	var colStyleIndex;
+	for (k = 0; k &lt; colsLength; k++) {
+		colStyleIndex = cols[k].captionStyleIndex || 0;
+		row += addStringCell(self, getColumnLetter(k + 1) + 1, cols[k].caption, colStyleIndex);
+		if (cols[k].width) {
+			colsWidth += '&lt;col customWidth = "1" width="' + cols[k].width + '" max = "' + (k + 1) + '" min="' + (k + 1) + '"/&gt;';
+		}
+	}
+	row += '&lt;/x:row&gt;';
+	rows += row;
+
+	//fill in data
+	var i, j, r, cellData, currRow, cellType, dataLength = data.length;
+
+	for (i = 0; i &lt; dataLength; i++) {
+		r = data[i],
+		currRow = i + 2;
+		row = '&lt;x:row r="' + currRow + '" spans="1:' + colsLength + '"&gt;';
+		for (j = 0; j &lt; colsLength; j++) {
+			styleIndex = null;
+			cellData = r[j];
+			cellType = cols[j].type;
+			if (typeof cols[j].beforeCellWrite === 'function') {
+				var e = {
+					rowNum: currRow,
+					styleIndex: null,
+					cellType: cellType
+				};
+				cellData = cols[j].beforeCellWrite(r, cellData, e);
+				styleIndex = e.styleIndex || styleIndex;
+				cellType = e.cellType;
+				delete e;
+			}
+			switch (cellType) {
+			case 'number':
+				row += addNumberCell(getColumnLetter(j + 1) + currRow, cellData, styleIndex);
+				break;
+			case 'date':
+				row += addDateCell(getColumnLetter(j + 1) + currRow, cellData, styleIndex);
+				break;
+			case 'bool':
+				row += addBoolCell(getColumnLetter(j + 1) + currRow, cellData, styleIndex);
+				break;
+			default:
+				row += addStringCell(self, getColumnLetter(j + 1) + currRow, cellData, styleIndex);
+			}
+		}
+		row += '&lt;/x:row&gt;';
+		rows += row;
+	}
+	if (colsWidth !== "") {
+		sheetFront += '&lt;cols&gt;' + colsWidth + '&lt;/cols&gt;';
+	}
+	xlsx.file(config.fileName, sheetFront + '&lt;x:sheetData&gt;' + rows + '&lt;/x:sheetData&gt;' + sheetBack);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+function generateMultiSheets(configs, xlsx) {
+	var i = 1;
+	configs.forEach(function(config) {
+		config.name = config.name ? config.name : ('sheet'+i);
+		i++;
+    var sheet = new Sheet(config, xlsx, shareStrings, convertedShareStrings);
+		sheet.<span class="apidocCodeKeywordSpan">generate</span>();
+    convertedShareStrings = sheet.convertedShareStrings
+	});
+}
+
+function generateContentType(configs, xlsx) {
+	var workbook = contentTypeFront;
+	configs.forEach( function(config) {
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
+</body></html>
